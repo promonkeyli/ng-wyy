@@ -7,7 +7,7 @@ import {NzMenuModule} from "ng-zorro-antd/menu";
 import {NzInputModule} from "ng-zorro-antd/input";
 import {NzIconModule} from "ng-zorro-antd/icon";
 import {NzCarouselModule} from "ng-zorro-antd/carousel";
-
+import {WyUiModule} from "./wy-ui/wy-ui.module";
 @NgModule({
   declarations: [],
   imports: [
@@ -18,7 +18,8 @@ import {NzCarouselModule} from "ng-zorro-antd/carousel";
     NzMenuModule,
     NzInputModule,
     NzIconModule,
-    NzCarouselModule
+    NzCarouselModule,
+    WyUiModule
   ],
   exports:[
     FormsModule,
@@ -28,7 +29,8 @@ import {NzCarouselModule} from "ng-zorro-antd/carousel";
     NzMenuModule,
     NzInputModule,
     NzIconModule,
-    NzCarouselModule
+    NzCarouselModule,
+    WyUiModule,
   ]
 })
 export class ShareModule { }
