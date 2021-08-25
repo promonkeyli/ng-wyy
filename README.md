@@ -1,4 +1,4 @@
-# NgWyy 3-6 入驻歌手
+# NgWyy 4-1 底部播放器布局
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.1.0.
 

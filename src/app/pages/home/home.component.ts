@@ -1,9 +1,9 @@
 import {Component, OnInit, TemplateRef, ViewChild, OnChanges, SimpleChanges} from '@angular/core';
-import { HomeService } from 'src/app/services/home.service';
-import {SingerService} from "../../services/singer.service";
 import {Banners, HotTags, Singer, SongSheets} from '../../services/data-types/common.types';
-import {SingerParams} from '../../services/data-types/params.types';
 import {NzCarouselComponent} from "ng-zorro-antd/carousel";
+import {ActivatedRoute} from "@angular/router";
+import {map} from "rxjs/operators";
+
 
 @Component({
   selector: 'app-home',
@@ -19,14 +19,18 @@ export class HomeComponent implements OnInit, OnChanges {
   public singers: Array<Singer> = [];
   @ViewChild(NzCarouselComponent, {static: true}) private nzCarousel?: NzCarouselComponent;
   /*********************周期钩子***********************/
-  constructor(private homeServe: HomeService,
-              private singerServe: SingerService) {
-    this.getBannersList();
-    this.getHotList();
-    this.getSheetList();
-    this.getSingerList();
+  constructor(private route: ActivatedRoute) {
   }
-  ngOnInit() {}
+  ngOnInit() {
+    // 路由解析守卫
+    this.route.data.pipe(map(res => res.HomeDatas))
+      .subscribe(([banners,hotTags,songSheets,singers]) => {
+        this.banners = banners;
+        this.hotTags = hotTags;
+        this.songSheets = songSheets;
+        this.singers = singers;
+      });
+  }
   ngOnChanges(changes: SimpleChanges){}
   /*********************功能函数***********************/
   /**
@@ -45,43 +49,6 @@ export class HomeComponent implements OnInit, OnChanges {
   onChangeSlide(type: 'pre' | 'next') {
     // @ts-ignore
     this.nzCarousel[type]();
-  }
-  /**
-   * @desc                       获取轮播图数据函数
-   * @param  { Object }  banners 轮播图数组接收参数
-   * @return { void }            无返回值
-   */
-  private getBannersList(): void{
-    this.homeServe.getBanners().subscribe(banners => this.banners = banners);
-  }
-  /**
-   * @desc                       获取热门歌单数据函数
-   * @param  { Object }  tags    热门歌单数组接收参数
-   * @return { void }            无返回值
-   */
-  private getHotList(): void{
-    this.homeServe.getHotTags().subscribe(tags => this.hotTags = tags);
-  }
-  /**
-   * @desc                          获取推荐歌单数据函数
-   * @param  { Object }  songSheets 推荐歌单数组接收参数
-   * @return { void }               无返回值
-   */
-  private getSheetList(): void{
-    this.homeServe.getPersonalizedSongs().subscribe(songSheets => this.songSheets = songSheets);
-  }
-  /**
-   * @desc                           获取歌手数组函数
-   * @param  { Array  }  singers     获取歌手接收数组
-   * @param  { Object }  params        接口请求参数
-   * @return { void }                无返回值
-   */
-  private getSingerList(): void{
-    const params: SingerParams = {
-      offset: 0,
-      limit: 15
-    }
-    this.singerServe.getEnterSinger(params).subscribe(singers => this.singers = singers);
   }
 
 }
