@@ -1,6 +1,8 @@
 import {Component, OnInit, TemplateRef, ViewChild, OnChanges, SimpleChanges} from '@angular/core';
 import { HomeService } from 'src/app/services/home.service';
-import {Banners, HotTags, SongSheets} from '../../services/data-types/common.types';
+import {SingerService} from "../../services/singer.service";
+import {Banners, HotTags, Singer, SongSheets} from '../../services/data-types/common.types';
+import {SingerParams} from '../../services/data-types/params.types';
 import {NzCarouselComponent} from "ng-zorro-antd/carousel";
 
 @Component({
@@ -14,12 +16,15 @@ export class HomeComponent implements OnInit, OnChanges {
   public banners: Array<Banners> = [];
   public hotTags: Array<HotTags> = [];
   public songSheets: Array<SongSheets> = [];
+  public singers: Array<Singer> = [];
   @ViewChild(NzCarouselComponent, {static: true}) private nzCarousel?: NzCarouselComponent;
   /*********************周期钩子***********************/
-  constructor(private homeServe: HomeService) {
+  constructor(private homeServe: HomeService,
+              private singerServe: SingerService) {
     this.getBannersList();
     this.getHotList();
     this.getSheetList();
+    this.getSingerList();
   }
   ngOnInit() {}
   ngOnChanges(changes: SimpleChanges){}
@@ -63,7 +68,20 @@ export class HomeComponent implements OnInit, OnChanges {
    * @return { void }               无返回值
    */
   private getSheetList(): void{
-    this.homeServe.getPersonalizedSongs().subscribe(songSheets => this.songSheets =songSheets);
+    this.homeServe.getPersonalizedSongs().subscribe(songSheets => this.songSheets = songSheets);
+  }
+  /**
+   * @desc                           获取歌手数组函数
+   * @param  { Array  }  singers     获取歌手接收数组
+   * @param  { Object }  params        接口请求参数
+   * @return { void }                无返回值
+   */
+  private getSingerList(): void{
+    const params: SingerParams = {
+      offset: 0,
+      limit: 15
+    }
+    this.singerServe.getEnterSinger(params).subscribe(singers => this.singers = singers);
   }
 
 }
