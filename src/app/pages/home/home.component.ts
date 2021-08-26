@@ -3,6 +3,7 @@ import {Banners, HotTags, Singer, SongSheets} from '../../services/data-types/co
 import {NzCarouselComponent} from "ng-zorro-antd/carousel";
 import {ActivatedRoute} from "@angular/router";
 import {map} from "rxjs/operators";
+import {SheetService} from "../../services/sheet.service";
 
 
 @Component({
@@ -19,7 +20,8 @@ export class HomeComponent implements OnInit, OnChanges {
   public singers: Array<Singer> = [];
   @ViewChild(NzCarouselComponent, {static: true}) private nzCarousel?: NzCarouselComponent;
   /*********************周期钩子***********************/
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute,
+              private sheetService: SheetService) {
   }
   ngOnInit() {
     // 路由解析守卫
@@ -38,7 +40,7 @@ export class HomeComponent implements OnInit, OnChanges {
    * @param  { number }  to      切换后的索引
    * @return { void }            无返回值
    */
-  onBeforeChange({ to}:any) {
+  public onBeforeChange({ to}:any) {
     this.carouselActiveIndex = to;
   }
   /**
@@ -46,9 +48,19 @@ export class HomeComponent implements OnInit, OnChanges {
    * @param  { string }  type         切换的箭头类型
    * @param  { Object }  nzCarousel   走马灯dom引用，用于调用组件内的切换方法
    */
-  onChangeSlide(type: 'pre' | 'next') {
+  public onChangeSlide(type: 'pre' | 'next') {
     // @ts-ignore
     this.nzCarousel[type]();
+  }
+  /**
+   * @desc                       歌单点击播放按钮事件响应函数
+   * @param  { number }  id      歌单id
+   * @return { void   }          无返回值
+   */
+  public sheetClick(id: number): void{
+    this.sheetService.getSheetDetail(id).subscribe((res: any) => {
+      console.log(res, 'res');
+    })
   }
 
 }

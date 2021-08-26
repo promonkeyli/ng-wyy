@@ -40,7 +40,7 @@
                 class="sheet-item"
                 *ngFor="let item of songSheets"
                 [sheet]="item"
-              >
+                (sheetClickOuter)="sheetClick($event)">
               </app-single-sheet>
             </div>
           </div>
