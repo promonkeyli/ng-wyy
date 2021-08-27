@@ -16,23 +16,29 @@ export class SheetService {
               @Inject(API_CONFIG) private url: string,
               private songService: SongService ) { }
   /**
-   * @desc                               获取歌单
+   * @desc                               获取歌单详情
    * @param  { number     }  id          歌单id
    * @param  { Object     }  playlist    歌单详情数据
    * @return { Observable }  playlist    歌单详情数据
    */
-  public getSheetDetail(id: number): Observable<SongSheets[]>{
+  public getSheetDetail(id: number): Observable<SongSheets>{
     const params = new HttpParams().set('id',id.toString());
     return this.http.get(this.url + 'playlist/detail',{params})
-      .pipe(map((songSheet: any) => songSheet.playlist));
+      .pipe(map((res: any) => {
+        return res.playlist
+      }))
   }
   /**
-   * @desc                       描述 pluck操作符可以取出指定的对象，switchMap
-   * @param  { Object }  params  参数
-   * @return { Object }          返回值
+   * @desc                       调用歌单详情接口，取出tracks数组（歌单中包含的歌曲信息）
+   * @param  { number }  id      歌单id
+   * @return { Array  }          歌单内的歌曲数组
    */
-  public PlaySheet(id: number): Observable<Song[]>{
-    return this.getSheetDetail(id).pipe(pluck('tracks'), switchMap(tracks => this.songService.getSongList(tracks)))
+  public playSheet(id: number): Observable<Song[]>{
+    return this.getSheetDetail(id)
+      .pipe(
+        pluck('tracks'),// 将playlist对象下的tracks映射到observable
+        switchMap((tracks: any) => this.songService.getSongList(tracks))
+      )
   }
 
 }

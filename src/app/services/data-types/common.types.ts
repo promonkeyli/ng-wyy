@@ -23,14 +23,8 @@ export type Song = {
   name: string;
   url: string;
   ar: Singer[]; // 歌曲由哪一些歌手参与
-  al: Album;
+  al: Album; // 专辑
   dt: number; // 播放时长
-}
-/*专辑*/
-export type Album = {
-  id: number;
-  name: string;
-  picUrl: string;
 }
 /*歌单*/
 export type SongSheets = {
@@ -39,6 +33,12 @@ export type SongSheets = {
   playCount: number;
   name: string;
   tracks: Array<Song>; // 歌曲组成的数组
+}
+/*专辑*/
+export type Album = {
+  id: number;
+  name: string;
+  picUrl: string;
 }
 /*歌曲url播放地址*/
 export type SongUrl ={

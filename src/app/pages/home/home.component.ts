@@ -53,12 +53,13 @@ export class HomeComponent implements OnInit, OnChanges {
     this.nzCarousel[type]();
   }
   /**
-   * @desc                       歌单点击播放按钮事件响应函数
-   * @param  { number }  id      歌单id
-   * @return { void   }          无返回值
+   * @desc                               歌单点击播放按钮事件响应函数
+   * @param     { number   }  id         歌单id
+   * @function  { function }  playSheet  根据歌单id查里面每一首哥的播放地址，然年添加到tracks原数组里，再返回歌曲数组（包含播放地址的）
+   * @return    { void     }             无返回值
    */
   public sheetClick(id: number): void{
-    this.sheetService.getSheetDetail(id).subscribe((res: any) => {
+    this.sheetService.playSheet(id).subscribe((res: any) => {
       console.log(res, 'res');
     })
   }
